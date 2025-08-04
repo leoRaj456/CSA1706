@@ -1,0 +1,31 @@
+from collections import deque
+
+def is_valid(m, c):
+    return (m == 0 or m >= c)
+
+def is_safe(state):
+    m_left, c_left, _ = state
+    m_right = 3 - m_left
+    c_right = 3 - c_left
+
+    return (0 <= m_left <= 3 and 0 <= c_left <= 3 and
+            is_valid(m_left, c_left) and is_valid(m_right, c_right))
+
+def get_successors(state):
+    m, c, boat = state
+    moves = [(1, 0), (2, 0), (0, 1), (0, 2), (1, 1)]
+    successors = []
+
+    for dm, dc in moves:
+        if boat == 1:  # Boat on left bank
+            new_state = (m - dm, c - dc, 0)
+        else:  
+            new_state = (m + dm, c + dc, 1)
+
+        if is_safe(new_state):
+            successors.append(new_state)
+
+    return successors
+
+def bfs():
+    start
