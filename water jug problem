@@ -1,0 +1,49 @@
+from collections import deque
+
+def is_goal(state, target):
+    return target in state
+
+def get_next_states(state, x, y):
+    a, b = state
+    states = []
+    states.append((x, b))
+    states.append((a, y))
+    states.append((0, b))
+    states.append((a, 0))
+    transfer = min(a, y - b)
+    states.append((a - transfer, b + transfer))
+    transfer = min(b, x - a)
+    states.append((a + transfer, b - transfer))
+
+    return states
+
+def water_jug_bfs(x, y, target):
+    visited = set()
+    q = deque()
+    q.append(((0, 0), []))  # ((jugA, jugB), path)
+
+    while q:
+        (a, b), path = q.popleft()
+
+        if is_goal((a, b), target):
+            path.append((a, b))
+            return path
+
+        for new_state in get_next_states((a, b), x, y):
+            if new_state not in visited:
+                visited.add(new_state)
+                q.append((new_state, path + [(a, b)]))
+
+    return None
+x = 5  # Capacity of Jug A
+y = 3  # Capacity of Jug B
+target = 4
+
+result = water_jug_bfs(x, y, target)
+
+if result:
+    print("Steps to reach target:")
+    for step in result:
+        print(f"Jug A: {step[0]}L, Jug B: {step[1]}L")
+else:
+    print("No solution found.")
