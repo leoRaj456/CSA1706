@@ -1,0 +1,32 @@
+import random
+environment = {
+    "A": random.choice([0, 1]),
+    "B": random.choice([0, 1])
+}
+vacuum_position = random.choice(["A", "B"])
+
+def vacuum_agent(env, position):
+    actions = []
+    print(f"Initial State: Room A = {'Dirty' if env['A'] else 'Clean'}, Room B = {'Dirty' if env['B'] else 'Clean'}")
+    print(f"Vacuum starting in Room {position}")
+
+    while env["A"] == 1 or env["B"] == 1:
+        if env[position] == 1:
+            actions.append(f"Suck in Room {position}")
+            env[position] = 0  # Clean the room
+        else:
+            if position == "A" and env["B"] == 1:
+                actions.append("Move Right to Room B")
+                position = "B"
+            elif position == "B" and env["A"] == 1:
+                actions.append("Move Left to Room A")
+                position = "A"
+            else:
+                break  # Both rooms are clean
+
+    print("Final State: Room A = Clean, Room B = Clean")
+    print("Actions taken:")
+    for action in actions:
+        print(f" - {action}")
+
+vacuum_agent(environment, vacuum_position)
